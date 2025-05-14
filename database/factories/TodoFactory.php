@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Todo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TodoFactory extends Factory
 {
+    protected $model = Todo::class; // Menentukan model yang digunakan
     /**
      * Define the model's default state.
      *
@@ -17,9 +22,10 @@ class TodoFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'=>rand(1,100),
-            'title' => ucwords(fake()->sentence()),
-            'is_done'=>rand(0,1),
+            'user_id' => User::factory(), // Menghubungkan dengan factory User
+            'title' => $this->faker->sentence, 
+            'is_done' => $this->faker->boolean(), // true atau false
+            'category_id' => Category::factory(), 
         ];
     }
 }
