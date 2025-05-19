@@ -11,8 +11,10 @@ class TodoController extends Controller
 {
     public function index()
     {
-        //$todos = Todo::all();
-       $todos = Todo::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $todos = Todo::with('category') 
+        ->where('user_id', Auth::id())
+        ->orderBy('created_at', 'desc')
+        ->get();
         //dd($todos);
        $todosCompleted = Todo::where('user_id', auth()->user()->id)
         ->where('is_complete', true)
@@ -44,7 +46,7 @@ class TodoController extends Controller
     public function edit(Todo $todo)
     {
         if (auth()->id() == $todo->user_id) {
-            $categories = \App\Models\Category::all(); // ambil semua kategori
+            $categories = Category::all(); 
             return view('todo.edit', compact('todo', 'categories'));
     } else {
         return redirect()->route('todo.index')->with('danger', 'You are not authorized to edit this todo!');
