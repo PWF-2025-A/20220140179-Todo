@@ -24,7 +24,7 @@ class TodoFactory extends Factory
         return [
             'user_id' => User::factory(), // Menghubungkan dengan factory User
             'title' => $this->faker->sentence, 
-            'is_done' => $this->faker->boolean(), // true atau false
+            'is_complete' => $this->faker->boolean(), // true atau false
             'category_id' => Category::factory(), 
         ];
     }

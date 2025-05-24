@@ -36,7 +36,8 @@
                                 
                             >
                               <option value="">Empty</option> <!-- Ini akan menjadi null -->
-                                @foreach ($categories as $category)
+                                @foreach (
+                                     as $category)
                                     <option value="{{ $category->id }}">{{ $category->title }}</option>
                                 @endforeach
 
