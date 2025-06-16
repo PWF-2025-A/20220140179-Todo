@@ -15,9 +15,13 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user() && $request->user()->is_admin){
-            return $next($request);
+         $user = auth()->guard('api')->user();
+        if (!$user || !$user->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access',
+            ], Response::HTTP_UNAUTHORIZED);
         }
-            return redirect()->route('/dashboard');        
+        return $next($request);
     }
 }

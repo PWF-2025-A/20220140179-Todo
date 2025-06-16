@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
@@ -28,11 +31,17 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useTailwind();
         Gate::define('admin', function ($user){
-            return $user->is_admin == true;
+        return $user->is_admin === true;
         });
-        Scramble::configure()->routes(function (Route $route) {
-            return Str::startsWith($route->uri, 'api/');
-        });
-       // Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+ // Konfigurasi Scramble (API documentation generator)Add commentMore actions
+        Scramble::configure()
+            ->routes(function (Route $route) {
+                return Str::startsWith($route->getPrefix(), 'api');
+            })
+            ->withDocumentTransformers(function (OpenApi $openApi): void {
+                $openApi->secure(
+                    SecurityScheme::http('bearer')
+                );
+            });
     }
 }
